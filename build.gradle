@@ -1,0 +1,48 @@
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = "com.eazyftw"
+version = 1.0
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+assemble.dependsOn shadowJar
+
+repositories {
+    maven { url 'https://jitpack.io' }
+
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+    }
+}
+
+shadowJar {
+    archiveName = 'SimpleWebsite.jar'
+    destinationDir = file("build")
+}
+
+jar {
+    manifest {
+        attributes 'Class-Path': '/libs/a.jar'
+        attributes 'Main-Class': 'com.eazyftw.simplewebsite.SimpleWebsite'
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

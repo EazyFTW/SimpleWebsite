@@ -1,0 +1,10 @@
+{
+  "port": 8888,
+  "mappings": [
+    {
+      "method": "GET",
+      "url": "/",
+      "fileName": "/home.html"
+    }
+  ]
+}
