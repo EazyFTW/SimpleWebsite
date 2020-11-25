@@ -9,6 +9,8 @@ import com.eazyftw.simplewebsite.web.mapping.Mappings;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SimpleWebsite {
 
@@ -34,13 +36,18 @@ public class SimpleWebsite {
             System.out.println("SUCCESS - Starting server with the port " + port + "!");
         }
 
-        Server server;
-        while (true) {
-            server = new Server(port, mappings);
+        Server server = new Server(port, mappings);
+        ExecutorService requestPool = Executors.newFixedThreadPool(20);
 
+        while (true) {
             Request req = server.accept();
-            server.sendResponse(req);
-            server.shut();
+            requestPool.execute(() -> {
+                try {
+                    server.sendResponse(req);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
